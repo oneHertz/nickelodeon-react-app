@@ -42,6 +42,8 @@ button {
   border-color: transparent;
   font-size: 2em;
   color: #000;
+  padding: 0;
+  margin: 0;
 }
 
 .searchInput, .usernameInput, .passwordInput {

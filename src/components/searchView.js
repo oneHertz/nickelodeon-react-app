@@ -97,7 +97,7 @@ function SearchView(props) {
     return (
       <div style={{margin: "15px"}}>
         <form ref={searchForm}>
-          <input className="searchInput" autoFocus ref={queryInput} name="search" type='search' placeholder='Search' autoComplete="off" size="16"></input>&nbsp;
+          <input className="searchInput" autoFocus ref={queryInput} name="search" type='search' placeholder='Search' autoComplete="off"></input>&nbsp;
           <button type="submit" style={{marginRight:"5px"}}><i className="fa-solid fa-magnifying-glass"></i></button>
           <button onClick={props.onCloseSearch}><i className="fa-solid fa-times"></i></button>
         </form>

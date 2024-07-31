@@ -101,7 +101,6 @@ function App() {
         await onLoggedOut()
       }
     })()
-    
   }, []);
 
   react.useEffect(() => {
@@ -118,7 +117,7 @@ function App() {
         return
       } catch {}
     }
-    (async() => await fetchRandomSongs())()
+    (async () => await fetchRandomSongs())();
   }, [options.apiRoot, options.authToken])
 
   react.useEffect(() => {
@@ -153,7 +152,7 @@ function App() {
     audioPlayer.play();
   } 
 
-  const fetchRandomSongs = async () => {
+  const fetchRandomSongs = async (forcePlay=false) => {
     try {
       const resp = await fetch(`${options.apiRoot}/songs/random_list/`, {
         method: 'GET',
@@ -167,7 +166,15 @@ function App() {
         throw new Error('Something wrong')
       }
       const data = await resp.json()
-      setRandomQueue(data)
+      
+      if (!audioData || forcePlay) {
+        const q = [...data];
+        const track = q.shift();
+        setRandomQueue([...q])
+        setAudioData(track);
+      } else {
+        setRandomQueue(data)
+      }
     } catch(e) {
       await onLoggedOut()
     }
@@ -180,15 +187,20 @@ function App() {
       setQueue([...q])
       setAudioData(track);
     } else if (randomQueue.length) {
+      console.log("randomQueue")
       const q = [...randomQueue];
       const track = q.shift();
       setRandomQueue([...q])
       setAudioData(track);
+      await fetchRandomSongs(true);
     } else {
-      await fetchRandomSongs()
-      await onAudioEnd();
+      await fetchRandomSongs(true);
     }
-    loadAndPlay()
+    try {
+      loadAndPlay()
+    } catch {
+
+    }
   }
 
   const onAudioPlaying = () => {

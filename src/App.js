@@ -187,7 +187,6 @@ function App() {
       setQueue([...q])
       setAudioData(track);
     } else if (randomQueue.length) {
-      console.log("randomQueue")
       const q = [...randomQueue];
       const track = q.shift();
       setRandomQueue([...q])

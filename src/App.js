@@ -192,7 +192,7 @@ function App() {
       const track = q.shift();
       setRandomQueue([...q])
       setAudioData(track);
-      await fetchRandomSongs(true);
+      await fetchRandomSongs();
     } else {
       await fetchRandomSongs(true);
     }

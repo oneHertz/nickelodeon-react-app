@@ -45,6 +45,7 @@ function App() {
   const [currentTime, setCurrentTime] = react.useState(0)
   const [duration, setDuration] = react.useState(0)
   const [queue, setQueue] = react.useState([])
+  const [randomQueue, setRandomQueue] = react.useState([])
   const [firstLoadDone, setFirstLoadDone] = react.useState(false)
   const [useAAC, setUseAAC] = react.useState(false)
   const [dl, setDl] = react.useState({})
@@ -117,7 +118,7 @@ function App() {
         return
       } catch {}
     }
-    (async() => await fetchRandomSong())()
+    (async() => await fetchRandomSongs())()
   }, [options.apiRoot, options.authToken])
 
   react.useEffect(() => {
@@ -152,9 +153,9 @@ function App() {
     audioPlayer.play();
   } 
 
-  const fetchRandomSong = async () => {
+  const fetchRandomSongs = async () => {
     try {
-      const resp = await fetch(`${options.apiRoot}/songs/random/`, {
+      const resp = await fetch(`${options.apiRoot}/songs/random_list/`, {
         method: 'GET',
         credentials: 'omit',
         headers: {
@@ -166,7 +167,7 @@ function App() {
         throw new Error('Something wrong')
       }
       const data = await resp.json()
-      setAudioData(data)
+      setRandomQueue(data)
     } catch(e) {
       await onLoggedOut()
     }
@@ -178,8 +179,14 @@ function App() {
       const track = q.shift();
       setQueue([...q])
       setAudioData(track);
+    } else if (randomQueue.length) {
+      const q = [...randomQueue];
+      const track = q.shift();
+      setRandomQueue([...q])
+      setAudioData(track);
     } else {
-      await fetchRandomSong()
+      await fetchRandomSongs()
+      await onAudioEnd();
     }
     loadAndPlay()
   }
@@ -219,16 +226,7 @@ function App() {
     try {
       e.preventDefault();
     } catch {};
-    if(queue.length) {
-      const track = queue.shift();
-      setQueue([...queue])
-      setAudioData(track); 
-    }else {
-      await fetchRandomSong()
-    }
-    try {
-    loadAndPlay()
-    } catch {}
+    await onAudioEnd();
   }
 
   const onQueue = (track) => {
@@ -292,16 +290,7 @@ function App() {
           setQueue(q);
           const currentId = audioData?.id;
           if (currentId === song.id) {
-            if(q.length) {
-              const track = q.shift();
-              setQueue([...q])
-              setAudioData(track); 
-            } else {
-              await fetchRandomSong()
-            }
-            try {
-              loadAndPlay()
-            } catch {}
+            await onAudioEnd();
           }
           cb && cb();
         } else if (response.status === 401) {

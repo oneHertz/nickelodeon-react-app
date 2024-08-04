@@ -211,13 +211,12 @@ function App() {
     if(audioPlayer) {
       audioPlayer.addEventListener("ended", onAudioEnd, false);
       audioPlayer.addEventListener("timeupdate", onAudioPlaying, false);
-      
     }
     return () => {
       audioPlayer?.removeEventListener("ended", onAudioEnd, false);
       audioPlayer?.removeEventListener("timeupdate", onAudioPlaying, false);
     }
-  }, [audioPlayer, queue])
+  }, [audioPlayer, queue, randomQueue])
 
   const onPlay = async (e) => {
     try {

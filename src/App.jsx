@@ -23,7 +23,7 @@ const appHeight = () => {
 
 window.addEventListener("resize", appHeight);
 
-const pkg = require('../package.json');
+import pkg from '../package.json';
 
 const options = {
   //audio lists model
@@ -108,8 +108,9 @@ function App() {
   }, [view]);
 
   react.useEffect(() => {
+    let done = false;
     if(!options.authToken) {
-      setUsername(null)
+      setUsername(null);
       return
     } else if (localStorage.getItem('current_v2')) {
       try {
@@ -118,6 +119,7 @@ function App() {
       } catch {}
     }
     (async () => await fetchRandomSongs())();
+    return;
   }, [options.apiRoot, options.authToken])
 
   react.useEffect(() => {
@@ -136,7 +138,7 @@ function App() {
     if(audioData){
       localStorage.setItem('current_v2', JSON.stringify(audioData));
     } else {
-      localStorage.removeItem('current_v2');
+      //localStorage.removeItem('current_v2');
     }
   }, [audioData])
 
@@ -172,6 +174,7 @@ function App() {
         const track = q.shift();
         setRandomQueue([...q])
         setAudioData(track);
+        console.log("A")
       } else {
         setRandomQueue(data)
       }

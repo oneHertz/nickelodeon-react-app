@@ -1,7 +1,7 @@
 import react from 'react'
 import swal from "sweetalert";
 
-const pkg = require('../../package.json');
+import pkg from '../../package.json';
 
 function LoginForm(props) {
     const usernameInput = react.useRef()

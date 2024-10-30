@@ -520,9 +520,9 @@ function App() {
           <UploadForm apiRoot={options.apiRoot} authToken={options.authToken} downloads={dl} enqueueSnackbar={enqueueSnackbar} onClose={()=>setView(PLAYER)} downloadYoutubeSong={downloadYoutubeSong} downloadSpotifySong={downloadSpotifySong}></UploadForm>
         )}
         <MediaSession
-          title={audioData?.filename}
-          album="humppakone.com"
-          artist="humppakone.com"
+          title={audioData?.filename?.split('/')?.pop()}
+          album={audioData?.filename?.split('/')?.slice(0, -1).join("/")}
+          artist="Humppakone.com"
           onPlay={onPlay}
           onPause={onPause}
           //onSeekBackward={() => {audioPlayer.currentTime -= 10}}

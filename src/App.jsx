@@ -8,6 +8,7 @@ import SearchView from './components/searchView'
 import QueueView from './components/queueView'
 import UploadForm from './components/uploadForm'
 import { useSnackbar } from 'notistack';
+import { Helmet } from 'react-helmet';
 
 import swal from "sweetalert";
 
@@ -497,7 +498,9 @@ function App() {
   }
 
   return (
-    <>
+    <><Helmet>
+        <title>{audioData?.filename ? audioData?.filename?.split('/')?.pop() + " | ":  ""} Humppakone</title>
+      </Helmet>
       {username && (<>
         <ProgressBar audioPlayer={audioPlayer} currentTime={currentTime} duration={duration}></ProgressBar>
         <LogoutBtn apiRoot={options.apiRoot} authToken={options.authToken} onLoggedOut={onLoggedOut}/>

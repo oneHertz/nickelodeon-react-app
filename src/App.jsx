@@ -498,7 +498,7 @@ function App() {
   }
 
   return (
-    <HelmetProvider><Helmet>
+    <HelmetProvider><Helmet defer={false}>
         <title>{audioData?.filename ? audioData?.filename?.split('/')?.pop() + " | ":  ""} Humppakone</title>
       </Helmet>
       {username && (<>

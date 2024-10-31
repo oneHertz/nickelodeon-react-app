@@ -8,7 +8,7 @@ import SearchView from './components/searchView'
 import QueueView from './components/queueView'
 import UploadForm from './components/uploadForm'
 import { useSnackbar } from 'notistack';
-import { Helmet } from 'react-helmet';
+import { Helmet, HelmetProvider } from 'react-helmet-async';
 
 import swal from "sweetalert";
 
@@ -498,7 +498,7 @@ function App() {
   }
 
   return (
-    <><Helmet>
+    <HelmetProvider><Helmet>
         <title>{audioData?.filename ? audioData?.filename?.split('/')?.pop() + " | ":  ""} Humppakone</title>
       </Helmet>
       {username && (<>
@@ -542,7 +542,7 @@ function App() {
       {!username && <>
         <LoginForm apiRoot={options.apiRoot} onLoggedIn={onLoggedIn}></LoginForm>
       </>}
-    </>
+    </HelmetProvider>
   );
 }
 

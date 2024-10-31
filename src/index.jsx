@@ -4,9 +4,8 @@ import App from './App';
 import { SnackbarProvider } from 'notistack';
 import { createRoot } from 'react-dom/client';
 
-
 const container = document.getElementById('app')
-const root = createRoot(container); // createRoot(container!) if you use TypeScript
+const root = createRoot(container);
 root.render(
   <React.StrictMode>
     <SnackbarProvider maxSnack={5}>

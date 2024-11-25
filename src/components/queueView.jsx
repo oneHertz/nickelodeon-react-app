@@ -70,7 +70,7 @@ function QueueView(props) {
                 <div style={{display: "flex", justifyContent: "flex-start"}}>
                   <div style={{padding: "5px", whiteSpace: "nowrap", minWidth: "55px"}} onClick={()=>onUnQueue(idx)}>
                     <i className="fa-solid fa-compact-disc fa-3x"></i><div style={{display: "inline-block", position: "relative",fontSize: "15px", color: "#fff", backgroundColor: "#09f", padding: "5px 10px", textAlign: "center", marginLeft: "-20px", borderRadius: "50%"}}>{idx + 1}</div></div>
-                  <div style={{paddingLeft: "5px", wordBreak:"break-all", flexShrink: 1, minWidth: "1%", maxWidth: "calc(100% - 108px)"}}>
+                  <div style={{paddingLeft: "5px", wordBreak:"break-word", flexShrink: 1, minWidth: "1%", maxWidth: "calc(100% - 108px)"}}>
                     <a href="/" style={{fontSize: "1.2em", textDecoration: "none", fontWeight: "bold", color: "#03a"}} onClick={(e) => onSelectResult(e, r)}>{r.filename.split('/').pop()}</a><br/>
                     <span>/{r.filename}</span><br/>
                     <span><i className="fa-solid fa-user"></i> {r.owner}</span>

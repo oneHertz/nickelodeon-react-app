@@ -3,6 +3,7 @@ import swal from 'sweetalert'
 import ReactResumableJs from './resumable'
 
 function UploadForm(props) {
+    const [disabledButton, setDisabledButton] = react.useState(true);
     const urlInput = react.useRef()
     const onSubmit = async (e) => {
         e.preventDefault()
@@ -45,11 +46,16 @@ function UploadForm(props) {
         urlInput.current.value = ""
     }
 
+    const onInputChange = () => {
+        setDisabledButton(!urlInput.current.value)
+        console.log(!urlInput.current.value)
+    }
+
     return (
         <div style={{margin: "15px"}}>
         <div>
             <form onSubmit={onSubmit}>
-                <i className="fa-brands fa-youtube fa-fw fa-2x"></i><i className="fa-brands fa-spotify fa-fw fa-2x"></i><input autoFocus placeholder="Spotify or Youtube URL" ref={urlInput} type="text" className="searchInput"></input> <button><i className="fa-solid fa-paste" onClick={async (e) => {e.preventDefault();urlInput.current.value = await navigator.clipboard.readText()}}></i></button> <button type="submit" disabled={!urlInput.current?.value}><i className="fa-solid fa-cloud-arrow-up"></i></button> <button onClick={props.onClose}><i className="fa-solid fa-times" ></i></button>
+                <i className="fa-brands fa-youtube fa-fw fa-2x"></i><i className="fa-brands fa-spotify fa-fw fa-2x"></i><input autoFocus placeholder="Spotify or Youtube URL" ref={urlInput} type="text" className="searchInput" onChange={onInputChange}></input> <button><i className="fa-solid fa-paste" onClick={async (e) => {e.preventDefault();urlInput.current.value = await navigator.clipboard.readText();onInputChange()}}></i></button> <button type="submit" disabled={disabledButton}><i className="fa-solid fa-cloud-arrow-up"></i></button> <button onClick={props.onClose}><i className="fa-solid fa-times" ></i></button>
             </form>
         </div>
         <ReactResumableJs

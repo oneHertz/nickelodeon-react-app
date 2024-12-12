@@ -43,12 +43,13 @@ function UploadForm(props) {
         if (spotifyTrackId) {
             await props.downloadSpotifySong(spotifyTrackId);
         }
-        urlInput.current.value = ""
+        urlInput.current.value = "";
+        setDisabledButton(true);
     }
 
     const onInputChange = () => {
-        setDisabledButton(!urlInput.current.value)
-        console.log(!urlInput.current.value)
+        setDisabledButton(!urlInput.current.value);
+        console.log(!urlInput.current.value);
     }
 
     return (

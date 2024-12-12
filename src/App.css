@@ -46,6 +46,10 @@ button {
   margin: 0;
 }
 
+button:disabled {
+  opacity:0.5;
+}
+
 .searchInput, .usernameInput, .passwordInput {
   background-color: transparent;
   color: #333;

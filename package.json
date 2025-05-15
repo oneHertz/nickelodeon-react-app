@@ -7,11 +7,6 @@
   "api_homepage": "https://api.humppakone.com",
   "contact_email": "info@humppakone.com",
   "dependencies": {
-    "@material-ui/core": "^4.12.4",
-    "@testing-library/jest-dom": "^5.11.4",
-    "@testing-library/react": "^11.1.0",
-    "@testing-library/user-event": "^12.1.10",
-    "@vitejs/plugin-react-swc": "^3.7.0",
     "notistack": "^1.0.5",
     "react": "^18.1.0",
     "react-beautiful-dnd": "^13.1.0",
@@ -19,7 +14,6 @@
     "react-helmet": "^6.1.0",
     "resumablejs": "^1.1.0",
     "sweetalert": "^2.1.2",
-    "vite": "^5.4.19",
     "web-vitals": "^1.0.1"
   },
   "scripts": {
@@ -40,5 +34,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react-swc": "^3.9.0",
+    "vite": "^5.4.19"
   }
 }

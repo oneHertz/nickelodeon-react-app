@@ -173,14 +173,13 @@ function App() {
       if (!audioData || forcePlay) {
         const q = [...data];
         const track = q.shift();
-        setRandomQueue([...q])
+        setRandomQueue([...q]);
         setAudioData(track);
-        console.log("A")
       } else {
-        setRandomQueue(data)
+        setRandomQueue(data);
       }
     } catch(e) {
-      await onLoggedOut()
+      await onLoggedOut();
     }
   }
 

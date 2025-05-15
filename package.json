@@ -20,7 +20,7 @@
     "start": "vite",
     "build": "vite build",
     "serve": "vite preview",
-    "predeploy": "yarn run build",
+    "predeploy": "vite build",
     "deploy": "cd ./build/ && scp -r ./ rphlo@humppakone.com:/apps/humppakone/"
   },
   "browserslist": {

@@ -106,7 +106,7 @@ function App() {
 
   react.useEffect(() => {
     appHeight()
-  }, [view]);
+  }, [view, window.visualViewport.height]);
 
   react.useEffect(() => {
     let done = false;

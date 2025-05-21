@@ -17,7 +17,7 @@ import React from 'react';
 
 const appHeight = () => {
   const doc = document.documentElement;
-  doc.style.setProperty("--app-height", `${window.innerHeight}px`);
+  doc.style.setProperty("--app-height", `${window.visualViewport.height}px`);
   const searchResultDiv = document.getElementById('searchResults');
   doc.style.setProperty("--app-header-height", searchResultDiv ? `${searchResultDiv.offsetTop}px` : '0px');
 };

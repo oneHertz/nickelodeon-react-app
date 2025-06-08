@@ -88,9 +88,9 @@ function App() {
             Authorization: 'Token ' + options.authToken,
             'Content-Type': 'application/json'
           }
-        })
-        if (resp.status !== 200) {
-          throw new Error('Something wrong')
+        }).catch((e) => {});
+        if (resp.status === 401) {
+          throw new Error('Unauthorized')
         }
         const data = await resp.json()
         if (data.status !== "logged in") {
@@ -164,9 +164,9 @@ function App() {
           Authorization: 'Token ' + options.authToken,
           'Content-Type': 'application/json'
         }
-      })
-      if (resp.status !== 200) {
-        throw new Error('Something wrong')
+      }).catch((e) => {});
+      if (resp.status === 401) {
+        throw new Error('Unauthorized')
       }
       const data = await resp.json()
       

@@ -1,21 +1,8 @@
 import react from 'react'
+import { printTime } from '../utils'
 
 function ProgressBar(props) {
     const progressBarDiv = react.useRef()
-    
-    const printTime = (t) => {
-        const prependZero = (x) => {
-          return ('0' + x).slice(-2);
-        };
-        t = Math.round(t);
-        var h = Math.floor(t / 3600),
-            m = Math.floor((t % 3600) / 60),
-            s = t % 60;
-        if (h === 0) {
-          return [m, prependZero(s)].join(':')
-        }
-        return [h, prependZero(m), prependZero(s)].join(':');
-    };
       
     const getProgressText = () => {
         const currentTime = props.audioPlayer?.currentTime || 0

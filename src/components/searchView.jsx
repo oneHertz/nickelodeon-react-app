@@ -113,9 +113,9 @@ function SearchView(props) {
                         <div style={{display: "inline-block", position: "relative",fontSize: "15px", color: "#fff", backgroundColor: "#09f", padding: "5px 10px", textAlign: "center", marginLeft: "-20px", borderRadius: "50%"}}>{trackQueueOrder(r)}</div>
                     }</div>
                   <div style={{paddingLeft: "5px", wordBreak:"break-word", flexShrink: 1, minWidth: "1%", maxWidth: "calc(100% - 108px)"}}>
-                    <a href="/" style={{fontSize: "1.2em", textDecoration: "none", fontWeight: "bold", color: "#03a"}} onClick={(e) => onSelectResult(e, r)}>{r.filename.split('/').pop()}</a> <small>{r.duration ? printTime(r.duration) : '??:??'}</small><br/>
+                    <a href="/" style={{fontSize: "1.2em", textDecoration: "none", fontWeight: "bold", color: "#03a"}} onClick={(e) => onSelectResult(e, r)}>{r.filename.split('/').pop()}</a><br/>
                     <span>/{r.filename}</span><br/>
-                    <span><i className="fa-solid fa-user"></i> {r.owner}</span>
+                    <span><i className="fa-solid fa-user"></i> {r.owner}</span> | <span>{r.duration ? printTime(r.duration) : '--:--'}</span>
                   </div>
                   <div style={{flexGrow: "1"}}></div>
                   <div style={{alignSelf: "center", verticalAlign:"top", fontSize:"0.55em"}}>

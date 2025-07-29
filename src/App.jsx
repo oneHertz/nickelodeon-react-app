@@ -50,9 +50,6 @@ function App() {
   const [queue, setQueue] = react.useState([])
   const [randomQueue, setRandomQueue] = react.useState([])
   const [firstLoadDone, setFirstLoadDone] = react.useState(false)
-  const [dl, setDl] = react.useState({})
-  const dlRef = react.useRef(dl);
-  dlRef.current = dl;
 
   const audioEl = react.useCallback((node) => {
     setAudioPlayer(node);
@@ -398,103 +395,6 @@ function App() {
       }
   };
 
-  function fetchStatus (v, t, c) {
-    const { apiRoot, authToken } = options;
-    fetch(apiRoot + '/tasks/' + t + '/',
-    {
-      method: 'GET',
-      credentials: 'omit',
-      headers: {
-          'Content-Type': 'application/json',
-          Authorization: 'Token ' + authToken,
-      },
-    }).then(async function(result){
-      return await result.json();
-    }).then(async function(response){
-      if(!response.pk) {
-        if (response.error) {
-          const downloads = {...dlRef.current};
-          enqueueSnackbar(downloads[t].songName + ' download failed', {variant: 'error'});
-          delete downloads[t];
-          setDl({...downloads});
-        } else {
-          const downloads = {...dlRef.current};
-          setTimeout(((a, b, cc) => (() => fetchStatus(a, b, cc)))(v, t, c), 1000);
-          downloads[t].songName = response?.song_name || c + " " + v;
-          setDl({...downloads});
-        }
-      } else {
-        const name = response.filename.split('/').pop();
-        enqueueSnackbar('Song "' + name + '" ready', {variant: 'success'});
-        const downloads = {...dlRef.current};
-        delete downloads[t];
-        setDl({...downloads});
-      }
-    }).catch((e) => {
-      console.log("error", e);
-      const downloads = {...dlRef.current};
-      if (downloads[t]) {
-        enqueueSnackbar(downloads[t].songName + ' download failed', {variant: 'error'})
-        delete downloads[t];
-        setDl({...downloads});
-      }
-    });
-  }
-
-  const onStartDownload = (videoId, taskId, client='Youtube') => {
-    enqueueSnackbar(client + ' download "' + videoId + '" started...');
-    const downloads = {...dlRef.current};
-    downloads[taskId] = { taskId, videoId, songName: client + " " + videoId, done: false, client };
-    setDl({...downloads});
-    setTimeout(() => fetchStatus(videoId, taskId, client), 1000);
-  }
-
-  const downloadYoutubeSong = async (videoId) => {
-    const { apiRoot, authToken } = options;
-    fetch(
-      apiRoot + '/youtube-dl/',
-      {
-        body: JSON.stringify({
-          v: videoId
-        }),
-        method: 'POST',
-        headers: {
-          Authorization: 'Token ' + authToken,
-          Accept: "application/json",
-          'Content-Type': 'application/json'
-        }
-      }
-    )
-    .then(async (response) => {
-      const data = await response.json();
-      onStartDownload(videoId, data.task_id)
-    })
-    .catch((e) => swal('Oops!', 'Youtube download ' + videoId + ' did not go through...', 'error'));
-  }
-
-  const downloadSpotifySong = async (videoId) => {
-    const { apiRoot, authToken } = options;
-    fetch(
-      apiRoot + '/spotify-dl/',
-      {
-        body: JSON.stringify({
-          s: videoId
-        }),
-        method: 'POST',
-        headers: {
-          Authorization: 'Token ' + authToken,
-          Accept: "application/json",
-          'Content-Type': 'application/json'
-        }
-      }
-    )
-    .then(async (response) => {
-      const data = await response.json();
-      onStartDownload(videoId, data.task_id, 'Spotify')
-    })
-    .catch((e) => swal('Oops!', 'Spotify download ' + videoId + ' did not go through...', 'error'));
-  }
-
   return (
     <><Helmet defer={false}>
         <title>{audioData?.filename ? audioData?.filename?.split('/')?.pop() + " | ":  ""} Humppakone</title>
@@ -515,7 +415,7 @@ function App() {
           <QueueView apiRoot={options.apiRoot} onSelect={onSelectAudio} onCloseQueue={()=>setView(PLAYER)} currentUsername={username} authToken={options.authToken} isSuperuser={isSuperuser} onShuffleQueue={onShuffleQueue} onUnQueue={onUnQueue} queue={queue} onDragQueueEnd={onDragQueueEnd} deleteAudio={deleteAudio} editAudioFilename={editAudioFilename}></QueueView>
         )}
         { view === UPLOAD && (
-          <UploadForm apiRoot={options.apiRoot} authToken={options.authToken} downloads={dl} enqueueSnackbar={enqueueSnackbar} onClose={()=>setView(PLAYER)} downloadYoutubeSong={downloadYoutubeSong} downloadSpotifySong={downloadSpotifySong}></UploadForm>
+          <UploadForm apiRoot={options.apiRoot} authToken={options.authToken} enqueueSnackbar={enqueueSnackbar} onClose={()=>setView(PLAYER)}></UploadForm>
         )}
         <MediaSession
           title={audioData?.filename?.split('/')?.pop()}

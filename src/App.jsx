@@ -48,13 +48,9 @@ function App() {
   const [queue, setQueue] = react.useState([])
   const [randomQueue, setRandomQueue] = react.useState([])
   const [firstLoadDone, setFirstLoadDone] = react.useState(false)
-  const [useAAC, setUseAAC] = react.useState(false)
   const [dl, setDl] = react.useState({})
   const dlRef = react.useRef(dl);
   dlRef.current = dl;
-  const toggleAAC = function() {
-    setUseAAC(!useAAC);
-  }
 
   const audioEl = react.useCallback((node) => {
     setAudioPlayer(node);
@@ -381,7 +377,7 @@ function App() {
 
   const getAudioUrl = (data) => {
     if(data) {
-      return data.download_url + '.' + (useAAC ? 'aac' : 'mp3') +'?auth_token=' + options.authToken
+      return data.download_url + '.mp3?auth_token=' + options.authToken
     }
     return null
   }
@@ -389,7 +385,7 @@ function App() {
   const onAudioDownload = (e) => {
       e.preventDefault();
       const url = getAudioUrl(audioData)
-      const name = audioData.filename?.split('/')?.pop() + '.' + (useAAC ? 'aac' : 'mp3')
+      const name = audioData.filename?.split('/')?.pop() + '.mp3'
       if (name && url) {
         const link = document.createElement('a')
         link.setAttribute("download", name)
@@ -503,17 +499,17 @@ function App() {
       {username && (<>
         <ProgressBar audioPlayer={audioPlayer} currentTime={currentTime} duration={duration}></ProgressBar>
         <LogoutBtn apiRoot={options.apiRoot} authToken={options.authToken} onLoggedOut={onLoggedOut}/>
-        <Controls audioPlayer={audioPlayer} onPlay={onPlay} onPause={onPause} onNext={onNext} onDownload={onAudioDownload} onSearch={()=>setView(SEARCH)} onShowQueue={()=>setView(QUEUE)} onUpload={()=>setView(UPLOAD)} toggleAAC={toggleAAC} useAAC={useAAC}></Controls>
+        <Controls audioPlayer={audioPlayer} onPlay={onPlay} onPause={onPause} onNext={onNext} onDownload={onAudioDownload} onSearch={()=>setView(SEARCH)} onShowQueue={()=>setView(QUEUE)} onUpload={()=>setView(UPLOAD)}></Controls>
         { (view === PLAYER || true) && (
         <div style={{margin: "15px"}}>
           <i className="fa-brands fa-itunes-note"></i> <span className="audioTitle">{audioData?.filename?.split('/')?.pop()}</span><br />
           <span className="audioFullTitle"><small>{audioData?.filename}</small></span>
         </div>)}
         { view === SEARCH && (
-          <SearchView apiRoot={options.apiRoot} onSelect={onSelectAudio} onLoggedOut={onLoggedOut} onCloseSearch={()=>setView(PLAYER)} currentUsername={username} authToken={options.authToken} isSuperuser={isSuperuser} onQueue={onQueue} queue={queue} deleteAudio={deleteAudio} editAudioFilename={editAudioFilename} useAAC={useAAC}></SearchView>
+          <SearchView apiRoot={options.apiRoot} onSelect={onSelectAudio} onLoggedOut={onLoggedOut} onCloseSearch={()=>setView(PLAYER)} currentUsername={username} authToken={options.authToken} isSuperuser={isSuperuser} onQueue={onQueue} queue={queue} deleteAudio={deleteAudio} editAudioFilename={editAudioFilename}></SearchView>
         )}
         { view === QUEUE && (
-          <QueueView apiRoot={options.apiRoot} onSelect={onSelectAudio} onCloseQueue={()=>setView(PLAYER)} currentUsername={username} authToken={options.authToken} isSuperuser={isSuperuser} onShuffleQueue={onShuffleQueue} onUnQueue={onUnQueue} queue={queue} onDragQueueEnd={onDragQueueEnd} deleteAudio={deleteAudio} editAudioFilename={editAudioFilename} useAAC={useAAC}></QueueView>
+          <QueueView apiRoot={options.apiRoot} onSelect={onSelectAudio} onCloseQueue={()=>setView(PLAYER)} currentUsername={username} authToken={options.authToken} isSuperuser={isSuperuser} onShuffleQueue={onShuffleQueue} onUnQueue={onUnQueue} queue={queue} onDragQueueEnd={onDragQueueEnd} deleteAudio={deleteAudio} editAudioFilename={editAudioFilename}></QueueView>
         )}
         { view === UPLOAD && (
           <UploadForm apiRoot={options.apiRoot} authToken={options.authToken} downloads={dl} enqueueSnackbar={enqueueSnackbar} onClose={()=>setView(PLAYER)} downloadYoutubeSong={downloadYoutubeSong} downloadSpotifySong={downloadSpotifySong}></UploadForm>

@@ -25,6 +25,7 @@ const appHeight = () => {
 window.addEventListener("resize", appHeight);
 
 import pkg from '../package.json';
+import { printVinyl } from './vinyl';
 
 const options = {
   //audio lists model
@@ -523,12 +524,14 @@ function App() {
           //onSeekBackward={() => {audioPlayer.currentTime -= 10}}
           //onSeekForward={() => {audioPlayer.currentTime += 10}}
           onNextTrack={onNext}
-          artwork={[
+          artwork={async () => {
+            const thumb = await printVinyl(audioData?.filename)
+            return [
             {
-              src: audioData?.download_url + '.jpg?auth_token=' + options?.authToken,
+              src: thumb,
               size: "512x512"
             },
-          ]}
+          ]}}
         />
         <audio ref={audioEl} preload="none" tabIndex="0">
           <source src={getAudioUrl(audioData)}></source>

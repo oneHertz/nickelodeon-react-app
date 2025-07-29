@@ -134,7 +134,7 @@ function App() {
   }, [username])
 
   react.useEffect(() => {
-    (async () => setArtwork(printVinyl(audioData?.filename)))();
+    (async () => setArtwork(await printVinyl(audioData?.filename)))();
     if(audioData){
       localStorage.setItem('current_v2', JSON.stringify(audioData));
     } else {

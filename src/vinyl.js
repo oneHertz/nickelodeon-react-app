@@ -19,10 +19,10 @@ let canvas;
 
 
 export const printVinyl = async function (id) {
-  const canvas2 = createCanvas(50, 50)
+  const canvas2 = createCanvas(500, 500)
   const ctx = canvas2.getContext('2d')
   ctx.drawImage(canvas, 0, 0);
-  const upperLayer = await loadImage(new Retricon().create(id, {imagePadding: 15, bgColor: "#EEF0EE", pixelSize: 4}).toDataURL());
+  const upperLayer = await loadImage(new Retricon().create(id, {imagePadding: 150, bgColor: "#EEF0EE", pixelSize: 40}).toDataURL());
   ctx.globalCompositeOperation = "destination-atop";
   ctx.drawImage(upperLayer, 0, 0);
   return canvas2.toDataURL();

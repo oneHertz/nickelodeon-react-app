@@ -42,6 +42,7 @@ const UPLOAD = 'upload'
 
 function App() {
   const [audioData, setAudioData] = react.useState(null)
+  const [artwork, setArtwork] = react.useState(null)
   const [audioPlayer, setAudioPlayer] = react.useState(null)
   const [view, setView] = react.useState(PLAYER)
   const [currentTime, setCurrentTime] = react.useState(0)
@@ -133,6 +134,7 @@ function App() {
   }, [username])
 
   react.useEffect(() => {
+    (async () => setArtwork(printVinyl(audioData?.filename)))();
     if(audioData){
       localStorage.setItem('current_v2', JSON.stringify(audioData));
     } else {
@@ -524,14 +526,12 @@ function App() {
           //onSeekBackward={() => {audioPlayer.currentTime -= 10}}
           //onSeekForward={() => {audioPlayer.currentTime += 10}}
           onNextTrack={onNext}
-          artwork={async () => {
-            const thumb = await printVinyl(audioData?.filename)
-            return [
+          artwork={[
             {
-              src: thumb,
+              src: artwork,
               size: "512x512"
             },
-          ]}}
+          ]}
         />
         <audio ref={audioEl} preload="none" tabIndex="0">
           <source src={getAudioUrl(audioData)}></source>

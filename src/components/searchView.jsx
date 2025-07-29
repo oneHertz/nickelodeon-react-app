@@ -1,5 +1,6 @@
 import react from 'react'
 import { printTime } from '../utils'
+import VinylImg from './vinylImg';
 
 function SearchView(props) {
     const searchForm = react.useRef()
@@ -107,7 +108,7 @@ function SearchView(props) {
             <div key={r.id} style={{borderBottom: "1px solid rgb(0,0,0,0.1)"}}>
                 <div style={{display: "flex", justifyContent: "flex-start"}}>
                   <div style={{padding: "5px", whiteSpace: "nowrap", minWidth: "55px"}} onClick={()=>onQueue(r)}>
-                    <i className="fa-solid fa-compact-disc fa-3x"></i>
+                    <VinylImg id={r.filename} width={50}/>
                     {
                       trackQueueOrder(r) &&
                         <div style={{display: "inline-block", position: "relative",fontSize: "15px", color: "#fff", backgroundColor: "#09f", padding: "5px 10px", textAlign: "center", marginLeft: "-20px", borderRadius: "50%"}}>{trackQueueOrder(r)}</div>

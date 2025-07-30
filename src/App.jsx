@@ -42,7 +42,7 @@ const UPLOAD = 'upload'
 
 function App() {
   const [audioData, setAudioData] = react.useState(null)
-  const [artwork, setArtwork] = react.useState(null)
+  const [artwork, setArtwork] = react.useState("")
   const [audioPlayer, setAudioPlayer] = react.useState(null)
   const [view, setView] = react.useState(PLAYER)
   const [currentTime, setCurrentTime] = react.useState(0)

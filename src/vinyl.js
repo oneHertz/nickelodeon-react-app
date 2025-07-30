@@ -1,21 +1,20 @@
-
 import { loadImage, createCanvas } from 'canvas';
+
 import Retricon from './retricon';
+
 import blankVinyl from "./vinyl_blank.jpg";
-import maskImage from "./vinyl_mask.png";
-let maskImageRaw;
-let blankVinylImg
+import mask from "./vinyl_mask.png";
+
 let baseCanvas = createCanvas(500, 500);
 
 (async () => {
-  maskImageRaw = await loadImage(maskImage);
-  blankVinylImg = await loadImage(blankVinyl);
+  const maskImg = await loadImage(mask);
+  const blankVinylImg = await loadImage(blankVinyl);
   const ctx = baseCanvas.getContext('2d')
   ctx.drawImage(blankVinylImg, 0, 0);
   ctx.globalCompositeOperation = "destination-in";
-  ctx.drawImage(maskImageRaw, 0, 0);
+  ctx.drawImage(maskImg, 0, 0);
 })();
-
 
 export const printVinyl = async function (id) {
   const canvas = createCanvas(500, 500)

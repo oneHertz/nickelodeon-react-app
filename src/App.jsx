@@ -401,10 +401,11 @@ function App() {
       </Helmet>
       {username && (<>
         <ProgressBar audioPlayer={audioPlayer} currentTime={currentTime} duration={duration}></ProgressBar>
+
         <LogoutBtn apiRoot={options.apiRoot} authToken={options.authToken} onLoggedOut={onLoggedOut}/>
         <Controls audioPlayer={audioPlayer} onPlay={onPlay} onPause={onPause} onNext={onNext} onDownload={onAudioDownload} onSearch={()=>setView(SEARCH)} onShowQueue={()=>setView(QUEUE)} onUpload={()=>setView(UPLOAD)}></Controls>
         { (view === PLAYER || true) && (
-        <div style={{margin: "15px"}}>
+        <div style={{margin: "0 15px"}}>
           <i className="fa-brands fa-itunes-note"></i> <span className="audioTitle">{audioData?.filename?.split('/')?.pop()}</span><br />
           <span className="audioFullTitle"><small>{audioData?.filename}</small></span>
         </div>)}

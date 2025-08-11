@@ -1,6 +1,6 @@
 function Controls(props) {
     return (
-        <div style={{margin: "15px"}}>
+        <div style={{margin: "0 15px 15px 15px"}}>
         { (!props.audioPlayer || props.audioPlayer?.paused) ?
         <button onClick={props.onPlay}><i className="fa-solid fa-play fa-fw"></i></button>
         : <button onClick={props.onPause}><i className="fa-solid fa-pause fa-fw"></i></button>}

@@ -147,8 +147,10 @@ function App() {
   }, [audioPlayer, audioData, firstLoadDone])
 
   const loadAndPlay = () => {
+    audioPlayer.addEventListener("loadeddata", function() {
+      audioPlayer.play();
+    });
     audioPlayer.load();
-    audioPlayer.play();
   } 
 
   const fetchRandomSongs = async (forcePlay=false) => {
@@ -195,6 +197,7 @@ function App() {
       await fetchRandomSongs(true);
     }
     try {
+      await (new Promise((done) => setTimeout(done, 0)));
       loadAndPlay()
     } catch {
 

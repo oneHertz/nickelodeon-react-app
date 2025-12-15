@@ -50,14 +50,17 @@ function App() {
   const [queue, setQueue] = react.useState([])
   const [randomQueue, setRandomQueue] = react.useState([])
   const [firstLoadDone, setFirstLoadDone] = react.useState(false)
+  const [username, setUsername] = react.useState(options.username)
+  const [isSuperuser, setIsSuperuser] = react.useState(options.isSuperuser)
 
   const audioEl = react.useCallback((node) => {
     setAudioPlayer(node);
   }, []);
 
-  const [username, setUsername] = react.useState(options.username)
-  const [isSuperuser, setIsSuperuser] = react.useState(options.isSuperuser)
-
+  const playerPaused = react.useCallback(() => {
+    return !audioPlayer || audioPlayer?.paused;
+  }, [audioPlayer, audioPlayer?.paused]);
+  
   const { enqueueSnackbar } = useSnackbar();
 
   react.useEffect(() => {
@@ -83,13 +86,13 @@ function App() {
             Authorization: 'Token ' + options.authToken,
             'Content-Type': 'application/json'
           }
-        }).catch((e) => {});
-        if (resp.status === 401) {
+        }).catch(() => {});
+        if (resp?.status === 401) {
           throw new Error('Unauthorized')
         }
         const data = await resp.json()
-        if (data.status !== "logged in") {
-          throw Error();
+        if (data?.status !== "logged in") {
+          throw Error('User not logged in');
         }
         setUsername(data.username);
         setIsSuperuser(data.is_superuser);
@@ -131,18 +134,16 @@ function App() {
   }, [username])
 
   react.useEffect(() => {
-    (async () => setArtwork(await printVinyl(audioData?.filename)))();
     if(audioData){
+      (async () => setArtwork(await printVinyl(audioData?.filename)))();
       localStorage.setItem('current_v2', JSON.stringify(audioData));
-    } else {
-      //localStorage.removeItem('current_v2');
     }
-  }, [audioData])
+  }, [audioData, audioData?.filename])
 
   react.useEffect(() => {
     if(audioPlayer && audioData && !firstLoadDone) {
+      audioPlayer.load();
       setFirstLoadDone(true)
-      audioPlayer.load()
     }
   }, [audioPlayer, audioData, firstLoadDone])
 
@@ -151,7 +152,7 @@ function App() {
       audioPlayer.play();
     });
     audioPlayer.load();
-  } 
+  }
 
   const fetchRandomSongs = async (forcePlay=false) => {
     try {
@@ -214,30 +215,25 @@ function App() {
       audioPlayer.addEventListener("ended", onAudioEnd, false);
       audioPlayer.addEventListener("timeupdate", onAudioPlaying, false);
     }
+
     return () => {
       audioPlayer?.removeEventListener("ended", onAudioEnd, false);
       audioPlayer?.removeEventListener("timeupdate", onAudioPlaying, false);
     }
-  }, [audioPlayer, queue, randomQueue])
+  }, [audioPlayer])
 
   const onPlay = async (e) => {
-    try {
-      e.preventDefault();
-    } catch {};
+    e?.preventDefault();
     await audioPlayer.play()
   }
 
   const onPause = async (e) => {
-    try {
-      e.preventDefault();
-    } catch {};
+    e?.preventDefault();
     await audioPlayer.pause()
   }
 
   const onNext = async (e) => {
-    try {
-      e.preventDefault();
-    } catch {};
+    e?.preventDefault();
     await onAudioEnd();
   }
 
@@ -398,6 +394,7 @@ function App() {
       }
   };
 
+
   return (
     <><Helmet defer={false}>
         <title>{audioData?.filename ? audioData?.filename?.split('/')?.pop() + " | ":  ""} Humppakone</title>
@@ -406,7 +403,16 @@ function App() {
         <ProgressBar audioPlayer={audioPlayer} currentTime={currentTime} duration={duration}></ProgressBar>
 
         <LogoutBtn apiRoot={options.apiRoot} authToken={options.authToken} onLoggedOut={onLoggedOut}/>
-        <Controls audioPlayer={audioPlayer} onPlay={onPlay} onPause={onPause} onNext={onNext} onDownload={onAudioDownload} onSearch={()=>setView(SEARCH)} onShowQueue={()=>setView(QUEUE)} onUpload={()=>setView(UPLOAD)}></Controls>
+        <Controls
+          isPaused={playerPaused()}
+          onPlay={onPlay}
+          onPause={onPause}
+          onNext={onNext}
+          onDownload={onAudioDownload}
+          onSearch={() => setView(SEARCH)}
+          onShowQueue={() => setView(QUEUE)}
+          onUpload={() => setView(UPLOAD)
+        }></Controls>
         { (view === PLAYER || true) && (
         <div style={{margin: "0 15px"}}>
           <i className="fa-brands fa-itunes-note"></i> <span className="audioTitle">{audioData?.filename?.split('/')?.pop()}</span><br />

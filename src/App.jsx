@@ -57,7 +57,7 @@ function App() {
     setAudioPlayer(node);
   }, []);
 
-  const playerPaused = react.useCallback(() => {
+  const isPlayerPaused = react.useCallback(() => {
     return !audioPlayer || audioPlayer?.paused;
   }, [audioPlayer, audioPlayer?.paused]);
   
@@ -223,17 +223,23 @@ function App() {
   }, [audioPlayer])
 
   const onPlay = async (e) => {
-    e?.preventDefault();
+    if (e?.preventDefault) {
+      e?.preventDefault();
+    }
     await audioPlayer.play()
   }
 
   const onPause = async (e) => {
-    e?.preventDefault();
+    if (e?.preventDefault) {
+      e?.preventDefault();
+    }
     await audioPlayer.pause()
   }
 
   const onNext = async (e) => {
-    e?.preventDefault();
+    if (e?.preventDefault) {
+      e?.preventDefault();
+    }
     await onAudioEnd();
   }
 
@@ -404,7 +410,7 @@ function App() {
 
         <LogoutBtn apiRoot={options.apiRoot} authToken={options.authToken} onLoggedOut={onLoggedOut}/>
         <Controls
-          isPaused={playerPaused()}
+          isPaused={isPlayerPaused()}
           onPlay={onPlay}
           onPause={onPause}
           onNext={onNext}
@@ -433,8 +439,6 @@ function App() {
           artist="Humppakone.com"
           onPlay={onPlay}
           onPause={onPause}
-          //onSeekBackward={() => {audioPlayer.currentTime -= 10}}
-          //onSeekForward={() => {audioPlayer.currentTime += 10}}
           onNextTrack={onNext}
           artwork={[
             {

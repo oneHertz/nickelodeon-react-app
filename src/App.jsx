@@ -107,7 +107,6 @@ function App() {
   }, [view, window.visualViewport.height]);
 
   react.useEffect(() => {
-    let done = false;
     if(!options.authToken) {
       setUsername(null);
       return
@@ -134,25 +133,20 @@ function App() {
   }, [username])
 
   react.useEffect(() => {
-    if(audioData){
+    if(audioPlayer && audioData) {
+      audioPlayer.addEventListener("loadeddata", () => {
+        if (firstLoadDone) {
+          audioPlayer.play();
+        }
+      });
+      audioPlayer.load();
       (async () => setArtwork(await printVinyl(audioData?.filename)))();
       localStorage.setItem('current_v2', JSON.stringify(audioData));
-    }
-  }, [audioData, audioData?.filename])
-
-  react.useEffect(() => {
-    if(audioPlayer && audioData && !firstLoadDone) {
-      audioPlayer.load();
-      setFirstLoadDone(true)
+      if (!firstLoadDone) {
+        setFirstLoadDone(true);
+      }
     }
   }, [audioPlayer, audioData, firstLoadDone])
-
-  const loadAndPlay = () => {
-    audioPlayer.addEventListener("loadeddata", function() {
-      audioPlayer.play();
-    });
-    audioPlayer.load();
-  }
 
   const fetchRandomSongs = async (forcePlay=false) => {
     try {
@@ -163,7 +157,7 @@ function App() {
           Authorization: 'Token ' + options.authToken,
           'Content-Type': 'application/json'
         }
-      }).catch((e) => {});
+      }).catch(() => {});
       if (resp.status === 401) {
         throw new Error('Unauthorized')
       }
@@ -182,26 +176,21 @@ function App() {
     }
   }
 
-  const onAudioEnd = async () => {
+  const onAudioEnd = () => {
     if(queue.length) {
       const q = [...queue];
       const track = q.shift();
       setQueue([...q])
       setAudioData(track);
+      console.log(track);
     } else if (randomQueue.length) {
       const q = [...randomQueue];
       const track = q.shift();
       setRandomQueue([...q])
       setAudioData(track);
-      await fetchRandomSongs();
+      (async () => fetchRandomSongs())();
     } else {
-      await fetchRandomSongs(true);
-    }
-    try {
-      await (new Promise((done) => setTimeout(done, 0)));
-      loadAndPlay()
-    } catch {
-
+      (async () => fetchRandomSongs(true))();
     }
   }
 
@@ -209,18 +198,6 @@ function App() {
     setCurrentTime(audioPlayer.currentTime)
     setDuration(audioPlayer.duration)
   } 
-
-  react.useEffect(() => {
-    if(audioPlayer) {
-      audioPlayer.addEventListener("ended", onAudioEnd, false);
-      audioPlayer.addEventListener("timeupdate", onAudioPlaying, false);
-    }
-
-    return () => {
-      audioPlayer?.removeEventListener("ended", onAudioEnd, false);
-      audioPlayer?.removeEventListener("timeupdate", onAudioPlaying, false);
-    }
-  }, [audioPlayer])
 
   const onPlay = async (e) => {
     if (e?.preventDefault) {
@@ -236,11 +213,11 @@ function App() {
     await audioPlayer.pause()
   }
 
-  const onNext = async (e) => {
+  const onNext = (e) => {
     if (e?.preventDefault) {
       e?.preventDefault();
     }
-    await onAudioEnd();
+    onAudioEnd();
   }
 
   const onQueue = (track) => {
@@ -304,7 +281,7 @@ function App() {
           setQueue(q);
           const currentId = audioData?.id;
           if (currentId === song.id) {
-            await onAudioEnd();
+            onAudioEnd();
           }
           cb && cb();
         } else if (response.status === 401) {
@@ -376,8 +353,7 @@ function App() {
   }
 
   const onSelectAudio = (data) => {
-    setAudioData(data)
-    loadAndPlay()
+    setAudioData(data);
   }
 
   const getAudioUrl = (data) => {
@@ -447,7 +423,7 @@ function App() {
             },
           ]}
         />
-        <audio ref={audioEl} preload="none" tabIndex="0">
+        <audio ref={audioEl} onEnded={onAudioEnd} onTimeUpdate={onAudioPlaying} preload="none" tabIndex="0">
           <source src={getAudioUrl(audioData)}></source>
         </audio>
       </>)}

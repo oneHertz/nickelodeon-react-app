@@ -133,12 +133,14 @@ function App() {
   }, [username])
 
   react.useEffect(() => {
+    const onLoaded = () => {
+      if (firstLoadDone) {
+        audioPlayer.play();
+      }
+    };
+
     if(audioPlayer && audioData) {
-      audioPlayer.addEventListener("loadeddata", () => {
-        if (firstLoadDone) {
-          audioPlayer.play();
-        }
-      });
+      audioPlayer.addEventListener("loadeddata", onLoaded);
       audioPlayer.load();
       (async () => setArtwork(await printVinyl(audioData?.filename)))();
       localStorage.setItem('current_v2', JSON.stringify(audioData));
@@ -146,6 +148,9 @@ function App() {
         setFirstLoadDone(true);
       }
     }
+    return () => {
+      audioPlayer?.removeEventListener?.("loadeddata", onLoaded);
+    } 
   }, [audioPlayer, audioData, firstLoadDone])
 
   const fetchRandomSongs = async (forcePlay=false) => {
@@ -182,7 +187,6 @@ function App() {
       const track = q.shift();
       setQueue([...q])
       setAudioData(track);
-      console.log(track);
     } else if (randomQueue.length) {
       const q = [...randomQueue];
       const track = q.shift();

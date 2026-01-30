@@ -8,7 +8,6 @@ function Controls(props) {
         onSearch,
         onShowQueue,
         onUpload,
-        
     } = props;
 
     return (

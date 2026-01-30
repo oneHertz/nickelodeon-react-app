@@ -50,6 +50,7 @@ function App() {
   const [queue, setQueue] = react.useState([])
   const [randomQueue, setRandomQueue] = react.useState([])
   const [firstLoadDone, setFirstLoadDone] = react.useState(false)
+  const [isPaused, setIsPaused] = react.useState(true)
   const [username, setUsername] = react.useState(options.username)
   const [isSuperuser, setIsSuperuser] = react.useState(options.isSuperuser)
 
@@ -57,6 +58,10 @@ function App() {
     setAudioPlayer(node);
   }, []);
   
+  react.useEffect(() => {
+    setIsPaused(audioPlayer?.paused)
+  }, [audioPlayer?.paused])
+
   const { enqueueSnackbar } = useSnackbar();
 
   react.useEffect(() => {
@@ -376,7 +381,6 @@ function App() {
       }
   };
 
-
   return (
     <><Helmet defer={false}>
         <title>{audioData?.filename ? audioData?.filename?.split('/')?.pop() + " | ":  ""} Humppakone</title>
@@ -386,7 +390,7 @@ function App() {
 
         <LogoutBtn apiRoot={options.apiRoot} authToken={options.authToken} onLoggedOut={onLoggedOut}/>
         <Controls
-          isPaused={!audioPlayer || audioPlayer?.paused}
+          isPaused={isPaused}
           onPlay={onPlay}
           onPause={onPause}
           onNext={onNext}

@@ -56,10 +56,6 @@ function App() {
   const audioEl = react.useCallback((node) => {
     setAudioPlayer(node);
   }, []);
-
-  const isPlayerPaused = react.useCallback(() => {
-    return !audioPlayer || audioPlayer?.paused;
-  }, [audioPlayer, audioPlayer?.paused]);
   
   const { enqueueSnackbar } = useSnackbar();
 
@@ -390,7 +386,7 @@ function App() {
 
         <LogoutBtn apiRoot={options.apiRoot} authToken={options.authToken} onLoggedOut={onLoggedOut}/>
         <Controls
-          isPaused={isPlayerPaused()}
+          isPaused={!audioPlayer || audioPlayer?.paused}
           onPlay={onPlay}
           onPause={onPause}
           onNext={onNext}

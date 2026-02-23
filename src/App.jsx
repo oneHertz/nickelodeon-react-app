@@ -427,7 +427,7 @@ function App() {
             },
           ]}
         />
-        <audio ref={audioEl} onEnded={onAudioEnd} onTimeUpdate={onAudioPlaying} preload="none" tabIndex="0">
+        <audio ref={audioEl} onEnded={onAudioEnd} onTimeUpdate={onAudioPlaying} preload="auto" tabIndex="0">
           <source src={getAudioUrl(audioData)}></source>
         </audio>
       </>)}

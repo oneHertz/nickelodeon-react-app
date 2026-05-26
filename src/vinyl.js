@@ -2,14 +2,14 @@ import { loadImage, createCanvas } from 'canvas';
 
 import Retricon from './retricon';
 
-import blankVinyl from "./vinyl_blank.jpg";
-import mask from "./vinyl_mask.png";
+const blankVinylUrl = new URL('/vinyl_blank.jpg', import.meta.url).href;
+const maskVinylUrl = new URL('/vinyl_mask.png', import.meta.url).href;
 
 let baseCanvas = createCanvas(500, 500);
 
 (async () => {
-  const maskImg = await loadImage(mask);
-  const blankVinylImg = await loadImage(blankVinyl);
+  const maskImg = await loadImage(maskVinylUrl);
+  const blankVinylImg = await loadImage(blankVinylUrl);
   const ctx = baseCanvas.getContext('2d')
   ctx.drawImage(blankVinylImg, 0, 0);
   ctx.globalCompositeOperation = "destination-in";

@@ -3,7 +3,7 @@ import React from "react";
 import { printVinyl } from "../vinyl";
 import { useIsVisible } from "../useIsVisible";
 
-import blankVinyl from "../vinyl_blank.jpg"
+import blankVinyl from "/vinyl_blank.jpg"
 
 function VinylImg(props) {
     const [imgDataURL, setImgDataURL] = React.useState(blankVinyl);
